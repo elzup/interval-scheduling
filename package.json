@@ -1,6 +1,6 @@
 {
-  "name": "interval-scheduler",
-  "version": "1.0.0",
+  "name": "interval-scheduling",
+  "version": "1.0.2",
   "description": "Efficient interval scheduling and optimization algorithms with TypeScript support",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
