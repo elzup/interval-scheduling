@@ -1,8 +1,4 @@
-import {
-  scheduling,
-  schedulingBy,
-  schedulingEase,
-} from '../index'
+import { scheduling, schedulingBy, schedulingEase } from '../index'
 import {
   schedulingEaseBy,
   schedulingEaseTry,
