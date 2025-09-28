@@ -1,0 +1,43 @@
+# Source files
+src/
+.eslintrc.js
+jest.config.js
+tsconfig.json
+
+# Tests
+**/*.test.ts
+**/*.spec.ts
+coverage/
+
+# Development files
+.git/
+.gitignore
+.eslintcache
+
+# Documentation
+docs/
+examples/
+benchmarks/
+
+# Build artifacts
+*.tsbuildinfo
+.nyc_output/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary
+tmp/
+temp/
