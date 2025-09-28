@@ -1,11 +1,11 @@
-# interval-scheduler
+# interval-scheduling
 
 Efficient interval scheduling and optimization algorithms with TypeScript support. Calculate row grouping for Gantt charts and solve interval scheduling problems.
 
 ## Installation
 
 ```bash
-npm install interval-scheduler
+npm install interval-scheduling
 ```
 
 ## Features
@@ -19,7 +19,7 @@ npm install interval-scheduler
 ## Basic Usage
 
 ```js
-import { scheduling } from 'interval-scheduler'
+import { scheduling } from 'interval-scheduling'
 
 const items = [
   { id: 'a', start: 1, end: 10 },
@@ -76,7 +76,7 @@ b,e|     +---------.+.<
 ### Working with Custom Objects
 
 ```js
-import { schedulingBy } from 'interval-scheduler'
+import { schedulingBy } from 'interval-scheduling'
 
 const meetings = [
   {
@@ -103,7 +103,7 @@ const result = schedulingBy(meetings, (meeting) => ({
 Use `schedulingEase` for optimized column allocation:
 
 ```js
-import { schedulingEase } from 'interval-scheduler'
+import { schedulingEase } from 'interval-scheduling'
 
 const optimizedResult = schedulingEase(items)
 console.log(optimizedResult)
@@ -115,7 +115,7 @@ console.log(optimizedResult)
 The package also provides a new API with additional metadata:
 
 ```js
-import { schedule, scheduleOptimized } from 'interval-scheduler'
+import { schedule, scheduleOptimized } from 'interval-scheduling'
 
 const result = schedule(items, { strategy: 'greedy' })
 console.log(result)
