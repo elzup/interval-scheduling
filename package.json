@@ -3,7 +3,15 @@
   "version": "1.0.0",
   "description": "Efficient interval scheduling and optimization algorithms with TypeScript support",
   "main": "lib/index.js",
+  "module": "lib/esm/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js"
+    }
+  },
   "keywords": [
     "interval",
     "scheduling",
@@ -22,9 +30,9 @@
     "build:esm": "tsc --module esnext --outDir lib/esm",
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir lib/types",
     "clean": "rimraf lib",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
     "lint": "oxlint src",
     "lint:fix": "oxlint src --fix",
     "benchmark": "node benchmarks/performance.js",
@@ -32,18 +40,28 @@
     "prepublishOnly": "npm run build && npm test"
   },
   "devDependencies": {
-    "@types/jest": "^29.0.0",
-    "jest": "^29.0.0",
+    "@vitest/ui": "^3.2.4",
     "oxlint": "^1.18.0",
     "rimraf": "^5.0.0",
-    "ts-jest": "^29.0.0",
     "typedoc": "^0.24.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^3.2.4"
   },
   "files": [
-    "lib/"
+    "lib/",
+    "README.md",
+    "LICENSE"
   ],
+  "sideEffects": false,
   "engines": {
-    "node": ">=14.0.0"
-  }
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elzup/interval-scheduling.git"
+  },
+  "bugs": {
+    "url": "https://github.com/elzup/interval-scheduling/issues"
+  },
+  "homepage": "https://github.com/elzup/interval-scheduling#readme"
 }

@@ -155,7 +155,7 @@ describe('schedulingEaseTry', () => {
   it('arg error', () => {
     expect(() => {
       schedulingEaseTry([], -1)
-    }).toThrowErrorMatchingInlineSnapshot(`"n must be greater than 0"`)
+    }).toThrow('n must be greater than 0')
   })
 })
 
