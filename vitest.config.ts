@@ -7,13 +7,21 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/**/*.d.ts',
+        'src/__tests__/**',
+        'src/types.ts',
+        'lib/**',
+        'vitest.config.ts',
+        '**/*.config.ts'
+      ],
       thresholds: {
-        branches: 90,
+        branches: 100,
         functions: 100,
-        lines: 95,
-        statements: 95
-      },
-      exclude: ['src/**/*.d.ts', 'src/__tests__/**']
+        lines: 100,
+        statements: 100
+      }
     }
   }
 })

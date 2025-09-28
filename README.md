@@ -1,5 +1,7 @@
 # interval-scheduling
 
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/elzup/interval-scheduling)
+
 Efficient interval scheduling and optimization algorithms with TypeScript support. Calculate row grouping for Gantt charts and solve interval scheduling problems.
 
 ## Installation
