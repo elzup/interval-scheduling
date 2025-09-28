@@ -1,6 +1,6 @@
 # interval-scheduling
 
-[![CI](https://github.com/elzup/interval-scheduling/workflows/CI/badge.svg)](https://github.com/elzup/interval-scheduling/actions)
+[![Node CI](https://github.com/elzup/interval-scheduling/actions/workflows/node.yml/badge.svg)](https://github.com/elzup/interval-scheduling/actions/workflows/node.yml)
 
 Efficient interval scheduling and optimization algorithms with TypeScript support. Calculate row grouping for Gantt charts and solve interval scheduling problems.
 
