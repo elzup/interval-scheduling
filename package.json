@@ -27,8 +27,8 @@
   "type": "module",
   "scripts": {
     "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
-    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
-    "build:esm": "tsc --module esnext --outDir lib/esm",
+    "build:cjs": "tsc --module commonjs --outDir lib/cjs && echo '{\"type\": \"commonjs\"}' > lib/cjs/package.json",
+    "build:esm": "tsc --module esnext --outDir lib/esm --moduleResolution node --allowSyntheticDefaultImports",
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir lib/types",
     "clean": "rimraf lib",
     "test": "vitest run",

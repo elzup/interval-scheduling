@@ -4,7 +4,7 @@ export {
   SchedulingOptions,
   ValidationError,
   Comparable,
-} from './types';
+} from './types.js'
 
 export {
   scheduling,
@@ -13,13 +13,10 @@ export {
   schedulingEaseBy,
   schedulingEaseTry,
   schedulingPick,
-} from './scheduling';
+} from './scheduling.js'
 
-export { 
+export {
   scheduling as schedule,
   schedulingEase as scheduleOptimized,
   schedulingBy as scheduleBy,
-} from './scheduling';
-
-import { schedulingEase } from './scheduling';
-export const scheduleBalanced = schedulingEase;
+} from './scheduling.js'
