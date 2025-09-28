@@ -24,6 +24,7 @@
   ],
   "author": "elzup",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
     "build:cjs": "tsc --module commonjs --outDir lib/cjs",
