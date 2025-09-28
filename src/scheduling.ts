@@ -33,14 +33,14 @@ export const schedulingPick = <T, K extends string | number = number>([
   ans.push(cur.id)
 
   for (let i = 0; i < a.length; i++) {
-    const currentItem = a[i];
+    const currentItem = a[i]
     if (cur && currentItem && cur.end > currentItem.start) continue
 
-    cur = currentItem;
+    cur = currentItem
     if (cur) {
-      ans.push(cur.id);
-      a.splice(i, 1);
-      i--;
+      ans.push(cur.id)
+      a.splice(i, 1)
+      i--
     }
   }
 
@@ -87,7 +87,9 @@ const withSchedulingBy = <T>(
   const res = scheduleFunc(k.map((v) => v.s))
   const byId = keyBy(k, (k) => k.s.id)
 
-  return res.map((row) => row.map((id) => byId[id]?.v).filter((v): v is T => v !== undefined))
+  return res.map((row) =>
+    row.map((id) => byId[id]?.v).filter((v): v is T => v !== undefined)
+  )
 }
 
 export const schedulingEaseTry = <T, K extends string | number = number>(
@@ -107,20 +109,18 @@ export const schedulingEaseTry = <T, K extends string | number = number>(
 
       p++
 
-      const column = ans[i];
+      const column = ans[i]
       if (column) {
-        const tail = last(column);
+        const tail = last(column)
 
         if (tail === undefined || tail.end <= v.start) {
-          column.push(v);
-          inserted = true;
-          break;
+          column.push(v)
+          inserted = true
+          break
         }
       }
     }
-    if (!inserted) {
-      return false
-    }
+    if (!inserted) return false
   }
 
   return ans.map((v) => v.map((e) => e.id))
