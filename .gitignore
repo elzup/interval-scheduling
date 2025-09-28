@@ -53,3 +53,5 @@ pids
 # Temporary folders
 tmp/
 temp/
+
+spec.md

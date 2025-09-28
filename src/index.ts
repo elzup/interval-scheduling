@@ -1,4 +1,3 @@
-// 型定義のエクスポート
 export {
   ScheduleItem,
   SchedulingResult,
@@ -7,37 +6,20 @@ export {
   Comparable,
 } from './types';
 
-// 核となる関数
 export {
-  schedule,
-  scheduleBy,
-  scheduleOptimized,
-  scheduleBalanced,
-} from './core/scheduler';
+  scheduling,
+  schedulingBy,
+  schedulingEase,
+  schedulingEaseBy,
+  schedulingEaseTry,
+  schedulingPick,
+} from './scheduling';
 
-// 後方互換性のためのエイリアス
-import { schedule as _schedule, scheduleOptimized as _scheduleOptimized, scheduleBy as _scheduleBy } from './core/scheduler';
-import { ScheduleItem, SchedulingOptions, Comparable } from './types';
+export { 
+  scheduling as schedule,
+  schedulingEase as scheduleOptimized,
+  schedulingBy as scheduleBy,
+} from './scheduling';
 
-export const scheduling = <T, K extends Comparable = number>(
-  items: ReadonlyArray<ScheduleItem<T, K>>,
-  options: SchedulingOptions = {}
-): T[][] => {
-  const result = _schedule(items, options);
-  return result.columns as T[][];
-};
-
-// Import original schedulingEase from legacy file
-import { schedulingEase as _schedulingEase } from './scheduling';
-
-export const schedulingEase = _schedulingEase;
-
-export const schedulingBy = <T, K extends Comparable = number>(
-  items: ReadonlyArray<T>,
-  mapper: (item: T, index: number) => ScheduleItem<string, K>,
-  options: SchedulingOptions = {}
-): T[][] => {
-  const result = _scheduleBy(items, mapper, options);
-  return result.columns as T[][];
-};
-
+import { schedulingEase } from './scheduling';
+export const scheduleBalanced = schedulingEase;
