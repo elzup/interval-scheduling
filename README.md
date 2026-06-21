@@ -36,7 +36,14 @@ console.log(result)
 // [['a', 'c'], ['b', 'e'], ['d']]
 ```
 
-### Visualization
+### How it works
+
+`scheduling` packs overlapping intervals into the fewest non-overlapping columns:
+
+![Interval scheduling: overlapping intervals packed into the fewest non-overlapping columns](./assets/scheduling.svg)
+
+<details>
+<summary>ASCII version</summary>
 
 ```
    |          111111111122
@@ -54,6 +61,8 @@ b,e|     +---------<+<
   d|            +-------<
 ```
 
+</details>
+
 ### Adding Gaps (Margins)
 
 If you need gaps between intervals, add margin to the end:
@@ -65,6 +74,11 @@ console.log(result)
 // [['a', 'd'], ['b', 'e'], ['c']]
 ```
 
+![Adding a margin to each interval reserves a gap between consecutive intervals in the same column](./assets/scheduling-gaps.svg)
+
+<details>
+<summary>ASCII version</summary>
+
 ```
    |          111111111122
    |0123456789012345678901
@@ -72,6 +86,8 @@ a,d|+--------.< +-------.<
 b,e|     +---------.+.<
   c|          +---------.<
 ```
+
+</details>
 
 ## Advanced Usage
 
