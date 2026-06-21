@@ -155,7 +155,12 @@ console.log(result)
 
 #### `scheduling(items, options?)`
 
-Basic interval scheduling using greedy algorithm.
+Greedy interval scheduling. Sorts by start, then assigns each interval to the
+column whose current end is earliest (via a min-heap), opening a new column only
+when none is free. The resulting column count is the minimum possible.
+
+**Complexity:** `O(n log n)` time, `O(n)` space — independent of how much the
+intervals overlap.
 
 **Parameters:**
 
@@ -178,13 +183,21 @@ Schedule custom objects by providing a transformation function.
 
 #### `schedulingEase(items)`
 
-Optimized scheduling that attempts to minimize column count.
+Balanced (round-robin) packing. Distributes intervals across columns in a
+round-robin fashion, trying the smallest feasible column count first. The lower
+bound (peak simultaneous overlap) is computed up front so infeasible attempts
+are skipped.
+
+**Complexity:** `O(n log n + n · C)` time, where `C` is the number of columns.
+For typical inputs (small `C`) this is effectively `O(n log n)`, but it grows
+heavier as overlap — and therefore `C` — increases. Prefer `scheduling` for
+large, highly-overlapping inputs.
 
 **Parameters:**
 
 - `items: ScheduleItem[]` - Array of items to schedule
 
-**Returns:** `T[][]` - Optimized column arrangement
+**Returns:** `T[][]` - Balanced column arrangement
 
 ### New API Functions
 
@@ -232,12 +245,19 @@ interface SchedulingOptions {
 
 ## Performance
 
-| Data Size     | Target Time | Memory Usage |
-| ------------- | ----------- | ------------ |
-| 100 items     | < 1ms       | < 1MB        |
-| 1,000 items   | < 10ms      | < 5MB        |
-| 10,000 items  | < 100ms     | < 50MB       |
-| 100,000 items | < 1s        | < 500MB      |
+`scheduling` runs in `O(n log n)` regardless of overlap. Measured best-of-5 on
+an M-series laptop (`npm run build && npm run benchmark`):
+
+| Data Size     | `scheduling` (staggered) | `scheduling` (fully overlapping) |
+| ------------- | ------------------------ | -------------------------------- |
+| 1,000 items   | ~0.2 ms                  | ~0.04 ms                         |
+| 10,000 items  | ~0.3 ms                  | ~0.4 ms                          |
+| 100,000 items | ~4 ms                    | ~7 ms                            |
+
+`schedulingEase` is heavier because round-robin packing is not optimal: cost
+scales with the column count `C`. It stays fast when `C` is small (staggered
+intervals: ~22 ms for 100,000 items) but slows down on highly-overlapping inputs
+(hundreds of overlapping columns). Use `scheduling` when throughput matters.
 
 ## Use Cases
 
