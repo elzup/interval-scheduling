@@ -1,3 +1,5 @@
+import { MinHeap } from './heap.js'
+
 export const last = <T>(a: T[]): T | undefined => a[a.length - 1]
 export const range = (n: number) => [...Array(n).keys()]
 export const keyBy = <T, K extends string>(
@@ -49,19 +51,60 @@ export const schedulingPick = <T, K extends string | number = number>([
 
 type ScheduleFunc = <T>(a: ScheduleItem<T>[]) => T[][]
 
+type Tail = { end: number; col: number }
+
+// Place every interval into the fewest non-overlapping columns.
+// Sort by start (O(n log n)), then for each interval reuse the column whose
+// current end is earliest (and still <= start), otherwise open a new column.
+// A min-heap keyed by (end, col) makes each lookup O(log n), so the whole pass
+// is O(n log n) and the column count is provably minimal.
 export const scheduling = <T>(a: ScheduleItem<T>[]): T[][] => {
-  let arr = [...a]
-  const ans: T[][] = []
+  const arr = [...a].sort((v, w) => v.start - w.start)
+  const columns: T[][] = []
+  const heap = new MinHeap<Tail>(
+    (x, y) => x.end < y.end || (x.end === y.end && x.col < y.col)
+  )
 
-  arr.sort((v, w) => v.start - w.start)
+  for (const item of arr) {
+    const top = heap.peek()
 
-  while (arr.length > 0) {
-    const [ids, after] = schedulingPick(arr)
+    if (top !== undefined && top.end <= item.start) {
+      heap.pop()
+      columns[top.col]!.push(item.id)
+      heap.push({ end: item.end, col: top.col })
+    } else {
+      const col = columns.length
 
-    arr = after
-    ans.push(ids)
+      columns.push([item.id])
+      heap.push({ end: item.end, col })
+    }
   }
-  return ans
+
+  return columns
+}
+
+// Maximum number of intervals overlapping at any instant. This equals the
+// minimum number of columns required, so it is the lower bound for any packing.
+// Ends are processed before starts at the same coordinate, matching the
+// "touching is not overlapping" rule used throughout this module.
+export const maxOverlap = <T>(a: ScheduleItem<T>[]): number => {
+  const events: [number, number][] = []
+
+  for (const item of a) {
+    events.push([item.start, 1])
+    events.push([item.end, -1])
+  }
+  events.sort((x, y) => x[0] - y[0] || x[1] - y[1])
+
+  let current = 0
+  let max = 0
+
+  for (const [, delta] of events) {
+    current += delta
+    if (current > max) max = current
+  }
+
+  return max
 }
 
 export const schedulingBy = <T>(
@@ -126,10 +169,17 @@ export const schedulingEaseTry = <T, K extends string | number = number>(
   return ans.map((v) => v.map((e) => e.id))
 }
 
+// Balanced (round-robin) packing. Any column count below `maxOverlap` is
+// infeasible, so we start trying from that lower bound instead of from 1 —
+// the skipped attempts would always fail, making this strictly faster while
+// producing the same result.
 export const schedulingEase = <T>(a: ScheduleItem<T>[]): T[][] => {
+  const lower = maxOverlap(a)
   let ans: T[][] = []
 
   for (const i of range(a.length)) {
+    if (i + 1 < lower) continue
+
     const res = schedulingEaseTry(a, i + 1)
 
     if (res !== false) {

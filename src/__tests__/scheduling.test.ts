@@ -1,5 +1,6 @@
 import { scheduling, schedulingBy, schedulingEase } from '../index'
 import {
+  maxOverlap,
   schedulingEaseBy,
   schedulingEaseTry,
   schedulingPick,
@@ -235,5 +236,74 @@ describe('schedulingBy', () => {
         { begin: '2007', end: '2010', myid: 'id-e' },
       ],
     ])
+  })
+})
+
+describe('maxOverlap', () => {
+  it('is zero for no intervals', () => {
+    expect(maxOverlap([])).toBe(0)
+  })
+
+  it('counts touching intervals as non-overlapping', () => {
+    expect(
+      maxOverlap([
+        { id: 'a', start: 0, end: 10 },
+        { id: 'b', start: 10, end: 20 },
+      ])
+    ).toBe(1)
+  })
+
+  it('counts the peak number of simultaneous intervals', () => {
+    expect(
+      maxOverlap([
+        { id: 'a', start: 1, end: 10 },
+        { id: 'b', start: 5, end: 15 },
+        { id: 'c', start: 10, end: 20 },
+        { id: 'd', start: 12, end: 20 },
+        { id: 'e', start: 16, end: 17 },
+      ])
+    ).toBe(3)
+  })
+})
+
+describe('scheduling (min-heap properties)', () => {
+  it('reuses the lowest column index on ties', () => {
+    const ids = scheduling([
+      { id: 'a', start: 0, end: 2 },
+      { id: 'b', start: 0, end: 2 },
+      { id: 'c', start: 3, end: 5 },
+    ])
+
+    expect(ids).toStrictEqual([['a', 'c'], ['b']])
+  })
+
+  it('uses exactly maxOverlap columns and packs without conflicts', () => {
+    // Deterministic pseudo-random intervals (no Math.random for reproducibility).
+    const items = Array.from({ length: 2000 }, (_, i) => {
+      const start = (i * 37) % 500
+      const end = start + (1 + ((i * 17) % 40))
+
+      return { id: i, start, end }
+    })
+
+    const byId = new Map(items.map((it) => [it.id, it]))
+    const columns = scheduling(items)
+
+    // 1. column count is optimal
+    expect(columns.length).toBe(maxOverlap(items))
+
+    // 2. every item appears exactly once
+    expect(columns.flat().sort((a, b) => a - b)).toStrictEqual(
+      items.map((it) => it.id).sort((a, b) => a - b)
+    )
+
+    // 3. items inside a column never overlap (sorted, end <= next start)
+    for (const col of columns) {
+      const intervals = col.map((id) => byId.get(id)!)
+
+      for (let i = 1; i < intervals.length; i++) {
+        expect(intervals[i - 1]!.end).toBeLessThanOrEqual(intervals[i]!.start)
+      }
+    }
   })
 })
